@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4339093021501514}
   - component: {fileID: 114533131571156100}
   - component: {fileID: 108600738106488886}
+  - component: {fileID: 95988440559947452}
   m_Layer: 0
   m_Name: Black Queen
   m_TagString: Untagged
@@ -113,6 +114,23 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1714640974163954}
   m_Mesh: {fileID: 4300000, guid: a12e8021ef84d494cb3e6a9ce1685af0, type: 3}
+--- !u!95 &95988440559947452
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1189455942717334}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 91135650708345943a4e8a6833c3301f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!108 &108600738106488886
 Light:
   m_ObjectHideFlags: 1
@@ -161,7 +179,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjType: 1
+  role: 0
+  isWhite: 0
   mats:
   - {fileID: 2100000, guid: 0bfba9a9a083d134f81cd288536cd21d, type: 2}
   - {fileID: 2100000, guid: 2510bc34f1ae09d48b1ad24a0736bb66, type: 2}
-  isWhite: 0

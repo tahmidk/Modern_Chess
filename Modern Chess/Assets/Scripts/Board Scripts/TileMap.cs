@@ -8,29 +8,33 @@ public class TileMap : MonoBehaviour
     /* Set up an instance of this TileMap so it can be accessed freely by other classes */
     public static TileMap Instance { get; set; }
 
-    #region Instance Fields
+    #region Public Macros
     public enum Obstacle {TREE}             /* Enum to help indexing mapPrefabs array */
+    const int mapSize = BoardManager.BOARD_SIZE;
+
     public GameObject[] obstaclePrefabs;     /* Holds the prefabs of the possible map obstacles */
     public GameObject emptyBoardObject;     /* Holds the prefab for the empty board object */
 
-    public Material selector;               /* Holds the material used to make tiles pointed to by mouse */
+    public Material select_glow;            /* Holds the material used to make tiles pointed to by mouse glow */
+    public Material attack_glow;            /* Holds the material used to make tiles glow if it has an enemy on it */
     public TileType[] tileTypes;            /* Maintains a list of possible tile types */
-    public TileType.Tiletype[,] tiles;      /* Keeps tile type info of position (x, y) on the board */
-    public GameObject[,] allTiles;          /* Keeps each physical tile game object at position (x, y) */
+    #endregion
+
+    #region Instance Fields
+    private TileType.Tiletype[,] tiles;      /* Keeps tile type info of position (x, y) on the board */
+    private GameObject[,] allTiles;          /* Keeps each physical tile game object at position (x, y) */
 
     public int highlightedTile_X = -1;              /* The x coordinate of the tile pointed to by the mouse */
     public int highlightedTile_Y = -1;              /* The y coordinate of the tile pointed to by the mouse */
-    public Material highlightedTile_OriginalMat;    /* Temporary storage for highlighted tile's original mat */
+    private Material highlightedTile_OriginalMat;    /* Temporary storage for highlighted tile's original mat */
 
     /* Maintains a list of all the (x, y) coordinates of the tiles highlighted as possible moves for a 
      * selected piece
      * Linked List because we will only be inserting and deleting, O(1) ops */
-    public LinkedList<int[]> highlightedTileMove;
+    private LinkedList<int[]> highlightedTileMove;
     #endregion
 
-    // Simply the size of the square board
-    const int mapSize = BoardManager.BOARD_SIZE;
-
+    /*----------------------------------------[START]----------------------------------------------*/
     private void Start()
     {
         highlightedTileMove = new LinkedList<int[]>();
@@ -53,8 +57,10 @@ public class TileMap : MonoBehaviour
         for (int i = 0; i < mapSize; i++)
             for (int j = 0; j < mapSize; j++)
             {
+                // Create a ditch spanning rows 6 - 9
                 if (j >= 6 && j <= 9)
                     continue;
+
                 tiles[i, j] = TileType.Tiletype.GRASS;
                 SpawnTile(i, j, Quaternion.identity);
             }
@@ -161,7 +167,7 @@ public class TileMap : MonoBehaviour
         Renderer tile_rend = tile.GetComponentInChildren<Renderer>();
         tile_rend.enabled = true;
         highlightedTile_OriginalMat = tile_rend.sharedMaterial;
-        tile_rend.sharedMaterial = selector;
+        tile_rend.sharedMaterial = select_glow;
 
         /* Update coordinates of the newly highlighted tile */
         highlightedTile_X = x;
@@ -193,7 +199,10 @@ public class TileMap : MonoBehaviour
             /* Fetch the Renderer component of the tile so we can change its material to the glow version */
             Renderer tile_rend = tile.GetComponentInChildren<Renderer>();
             tile_rend.enabled = true;
-            tile_rend.sharedMaterial = tileTypes[(int)tile_type].tileMaterials[(int)TileType.Mat.GLOW];
+            if (BoardManager.Instance.Board[x, y].ObjType == BoardObjects.Type.PIECE)
+                tile_rend.sharedMaterial = attack_glow;
+            else
+                tile_rend.sharedMaterial = tileTypes[(int)tile_type].tileMaterials[(int)TileType.Mat.GLOW];
 
             /* Add coordinates to the list of highlighted tiles */
             highlightedTileMove.AddLast(new int[2] { x, y });

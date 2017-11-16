@@ -1,0 +1,3 @@
+------------------------[BUG REPORT]-------------------------
+[LOG: NOV 15, 2017] - Tahmid
+- (FIXED) If you select a piece and immediately unselect it, tile under it continues to glow

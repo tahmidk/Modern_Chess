@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4091346932552376}
   - component: {fileID: 114672952653803034}
   - component: {fileID: 108038329842933714}
+  - component: {fileID: 95934313917545946}
   m_Layer: 0
   m_Name: White Rook
   m_TagString: Untagged
@@ -113,6 +114,23 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1869777530579878}
   m_Mesh: {fileID: 4300000, guid: 5191956bd5bb6014999f81129cf153e3, type: 3}
+--- !u!95 &95934313917545946
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1451150441598584}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2eedb0e178e78c6468e0b63f5e413d05, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!108 &108038329842933714
 Light:
   m_ObjectHideFlags: 1
@@ -161,7 +179,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjType: 1
+  role: 0
+  isWhite: 1
   mats:
   - {fileID: 2100000, guid: 4368369c6a74a954b977df5984ac685a, type: 2}
   - {fileID: 2100000, guid: 3b6b6e87f8df75047ba651a095cdf993, type: 2}
-  isWhite: 1

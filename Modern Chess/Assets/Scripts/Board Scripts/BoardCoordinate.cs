@@ -26,7 +26,8 @@ public class BoardCoordinate
      */
     public BoardCoordinate GetOffsetCoord(Direction dir, int offset)
     {
-        int newX = _x, newY = _y;
+        int newX = _x;
+        int newY = _y;
         switch(dir)
         {
             case Direction.NORTH:
@@ -66,8 +67,8 @@ public class BoardCoordinate
                 break;
         }
 
-        if (newX > 0 && newX < BoardManager.BOARD_SIZE &&
-            newY > 0 && newY < BoardManager.BOARD_SIZE)
+        if (newX >= 0 && newX < BoardManager.BOARD_SIZE &&
+            newY >= 0 && newY < BoardManager.BOARD_SIZE)
             return new BoardCoordinate(newX, newY);
 
         return null;

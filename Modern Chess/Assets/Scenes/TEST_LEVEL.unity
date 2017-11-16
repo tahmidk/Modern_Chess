@@ -406,7 +406,8 @@ MonoBehaviour:
   - {fileID: 1547612746814390, guid: 59ce2d03f3a413940b44c27a3202dcb3, type: 2}
   emptyBoardObject: {fileID: 1650697165675784, guid: 17db0bbb217d5764f86993e92d23e278,
     type: 2}
-  selector: {fileID: 2100000, guid: 51cd96a5917d3354cbe4f208aba5bcf8, type: 2}
+  select_glow: {fileID: 2100000, guid: 51cd96a5917d3354cbe4f208aba5bcf8, type: 2}
+  attack_glow: {fileID: 2100000, guid: 514bf4e9605c2fe4780db831ad42f4f2, type: 2}
   tileTypes:
   - type: 0
     tilePrefab:
@@ -442,7 +443,6 @@ MonoBehaviour:
     - {fileID: 2100000, guid: e5ebba88968f7bf479e8d1b1775a0cdb, type: 2}
   highlightedTile_X: -1
   highlightedTile_Y: -1
-  highlightedTile_OriginalMat: {fileID: 0}
 --- !u!114 &1208578314
 MonoBehaviour:
   m_ObjectHideFlags: 0

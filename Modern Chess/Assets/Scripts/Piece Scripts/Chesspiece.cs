@@ -12,16 +12,29 @@ using UnityEngine;
  */
 public abstract class Chesspiece : BoardObjects
 {
-    // An enum for the indecies of the mats array field
-    public enum Mat {ORIGINAL, GLOW}
+    #region Public Macros
+    public enum Mat {ORIGINAL, GLOW }       /* An enum for the indecies of the mats array field */
+    public enum Rank { PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING } /* The possible identity chess piece roles */
+    public const float JUMP_DELAY = 0.1f;   /* The time needed for any piece to finish winding for a jump before 
+                                               entering the air */
+    #endregion
 
+    #region Private fields
+    protected Vector3 destination;      /* For tile transitions, this is the destination of the new space */
+    protected Animator animator;        /* This piece's animator */
+    #endregion
+
+    #region Public fields
+    public Rank role;                   /* The role of this piece */
+    public bool isWhite;                /* Boolean to determine color of this piece */
     public Material[] mats;             /* Holds the different materials possible for the chesspiece
                                             original material (indx:0), GLOW (indx:1) */
-    public bool isWhite;                /* Boolean to determine color of this piece */
+    #endregion
 
+    #region Highlighting Functions
     /** Function:   Highlight()
-     *  Argument:   
-     *  Output:     Highlights the 
+     *  Argument:   None
+     *  Output:     Highlights the piece (when piece is selected)
      */
     public void Highlight()
     {
@@ -35,7 +48,7 @@ public abstract class Chesspiece : BoardObjects
 
     /** Function:   Unhighlight()
      *  Argument:   None
-     *  Output:     Unhighlights this piece and reverts it back to its original material
+     *  Output:     Unhighlights this piece (when piece is unselected)
      */
     public void Unhighlight()
     {
@@ -46,19 +59,31 @@ public abstract class Chesspiece : BoardObjects
         Light light = this.GetComponent<Light>();
         light.enabled = false;
     }
+    #endregion
 
-    // Override move set in each individual piece's class
-    public virtual Hashtable PossibleMoves()
-    {
-        return new Hashtable();
-    }
+    /** Function: PossibleMove()
+     *  Override move set in each individual piece's class. Each piece should return a Hashtable containing
+     *  all the possible moves this piece can currently make from its position and taking into account items
+     *  in play and the surroundings
+     */
+    public virtual Hashtable PossibleMoves()    { return new Hashtable(); }
 
+    #region Transition Animations
     /** Function:   GoToJump(Vec3)
      *  Argument:   Vec3 destination - the exact coordinates (not board coordinates) in the world 
      *                                 to jump to
-     *  Output:     This piece will jump to the destination 
+     *  Output:     This piece will jump to the destination. Override for pieces that have limited
+     *              movement schemes (i.e. King, Knight, Pawn)
      */
-    public abstract void GoToJump(Vector3 destination);
+    public virtual void GoToJump(Vector3 dest)  { return; }
+
+    /** Function:   GoToSlide(Vec3)
+     *  Argument:   Vec3 destination - the exact coordinates (not board coordinates) in the world to
+     *                                 slide to
+     *  Output:     This piece will slide to the destination. Override for pieces that have unlimited
+     *              movement schemes (i.e. Queen, Rook, and Bishop)
+     */
+    public virtual void GoToSlide(Vector3 dest) { return; }
 
     /** Function:   GoToAttack(Vec3)
      *  Argument:   Vec3 destination - the exact coordinates (not board coordinates) in the world 
@@ -66,4 +91,35 @@ public abstract class Chesspiece : BoardObjects
      *  Output:     This piece will go to the destination using the attack animation
      */
     public abstract void GoToAttack(Vector3 destination);
+    #endregion
+
+    /** Function:   GoTo(Vec3)
+     *  Argument:   Vec3 destination - the exact coordinates for this chesspiece to go to
+     *  Output:     Chooses the appropriate movement animation function based on whether the selected piece is
+     *              a piece with restricted movement or unrestricted movement and executes the corresponding
+     *              GoTo___(Vec3) function with the argument Vec3 destination
+     */
+    public void GoTo(Vector3 destination)
+    {
+        switch (this.role)
+        {
+            case Chesspiece.Rank.PAWN:
+            case Chesspiece.Rank.KNIGHT:
+            case Chesspiece.Rank.KING:
+                this.GoToJump(destination);
+                break;
+            case Chesspiece.Rank.BISHOP:
+            case Chesspiece.Rank.ROOK:
+            case Chesspiece.Rank.QUEEN:
+                this.GoToSlide(destination);
+                break;
+        }
+    }
+
+    // A delay function used to time jumps when using the GoToJump() method to move
+    protected IEnumerator DelayedTransition(Vector3 target)
+    {
+        yield return new WaitForSeconds(JUMP_DELAY);
+        destination = target;
+    }
 }

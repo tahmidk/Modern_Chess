@@ -9,9 +9,10 @@ using UnityEngine;
  */
 public class BoardManager : MonoBehaviour
 {
+    // Set up an instance of this class so other classes can access it
     public static BoardManager Instance { get; set; }
 
-    #region Public Constants
+    #region Public Macros
     public const int NUM_PIECES = 8;                    /* Number of pieces is 8 regardless of board size */
     public const int BOARD_SIZE = 16;                   /* Board will be 16 tiles x 16 tiles (must be even and >8) */
     public const float TILE_SIZE = 1.0f;                /* Size of tiles: 1m x 1m */
@@ -74,10 +75,8 @@ public class BoardManager : MonoBehaviour
                 /* There is a selected piece, we are in move mode */
                 else
                 {
-                    TileMap.Instance.highlightedTile_X = -1;
-                    TileMap.Instance.highlightedTile_Y = -1;
-                    TileMap.Instance.UnhighlightMoves();
                     MoveChesspiece(tileSelected_X, tileSelected_Y);
+                    TileMap.Instance.UnhighlightMoves();
                 }
 
     }
@@ -151,21 +150,23 @@ public class BoardManager : MonoBehaviour
             selected_piece.CurrentX = x;
             selected_piece.CurrentY = y;
             //selected_piece.transform.position = GetTileCenter(x, y);
-            selected_piece.GoToJump(GetTileCenter(x, y));
+            selected_piece.GoTo(GetTileCenter(x, y));
 
             // Go to next turn
             turn++;
         }
 
         // Reset the selected piece
+        TileMap.Instance.UnhighlightSelect(x, y);
         selected_piece.Unhighlight();
         AllowedMoves.Clear();
         selected_piece = null;
     }
 
-    /** Function:       SpawnAll()
-     *  Argument:       None
-     *  Output:         Spawns all black and white chess pieces on both sides of board
+    /** Function:   SpawnAll()
+     *  Argument:   None
+     *  Output:     Spawns all black and white chess pieces on both sides of board
+     *  
      *  [POSTCONDITION] Populates activeChessPieces in the process
      */
     private void SpawnAll()

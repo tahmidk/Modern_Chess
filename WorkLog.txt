@@ -1,0 +1,8 @@
+----------------------[PROGRESS REPORT]-----------------------
+[LOG: NOV 15, 2017] - Tahmid
+- Added precise pawn jump animations 
+- Added method DelayedTransition to class Chesspiece and a few speed related fields and constants
+- Completed all IDLE animations
+- Completed Pawn jump animation w/ rotations
+- Added in attack tiles for Pawn and a red glow for attack spaces
+- Implemented Rook moveset (animations pending)

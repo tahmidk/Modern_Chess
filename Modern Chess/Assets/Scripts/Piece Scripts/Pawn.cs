@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class Pawn : Chesspiece
 {
+    private const float BASE_SPEED = 7f;
+    private float speed;
+
+    private void Start()
+    {
+        // Initialize fields
+        role = Rank.PAWN;
+        destination = this.transform.position;
+    }
+
+    private void Update()
+    {
+        // If there is a new destination, move towards that destination
+        if (transform.position != destination)
+        {
+            Vector3 start_pos = this.GetComponentInParent<Transform>().position;
+            Vector3 direction = destination - start_pos;
+            transform.rotation = Quaternion.LookRotation(direction);
+            transform.position = Vector3.MoveTowards(start_pos, destination, speed * Time.deltaTime);
+        }
+    }
+
     /** Function:   PossibleMoves (Pawn Override)
      *  Argument:   None
      *  Output:     Returns a boolean matrix of size BoardManager.BOARD_SIZE x BoardManager.BOARD_SIZE
@@ -29,66 +51,67 @@ public class Pawn : Chesspiece
                 // Check 1 tile to the right
                 temp_coord = this_coord.GetOffsetCoord(BoardCoordinate.Direction.EAST, offset);
                 temp = (temp_coord == null) ? null : board[temp_coord.X, temp_coord.Y];
-                if (temp)
-                    switch (temp.ObjType)
-                    {
-                        case BoardObjects.Type.EMPTY:    /* Space is empty */
-                            moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                        case BoardObjects.Type.PIECE:   /* Space is occupied by a chess piece */
-                            // Can only move here if the piece is of the opposite team
-                            if(this.isWhite != temp.GetComponentInChildren<Chesspiece>().isWhite)
-                                moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                    }
+                if (temp && temp.ObjType == BoardObjects.Type.EMPTY)
+                    moveset.Add(temp_coord.ToString(), temp_coord);
 
                 // Check 1 tile to the left
                 temp_coord = this_coord.GetOffsetCoord(BoardCoordinate.Direction.WEST, offset);
                 temp = (temp_coord == null) ? null : board[temp_coord.X, temp_coord.Y];
-                if (temp)
-                    switch (temp.ObjType)
-                    {
-                        case BoardObjects.Type.EMPTY:    /* Space is empty */
-                            moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                        case BoardObjects.Type.PIECE:   /* Space is occupied by a chess piece */
-                            // Can only move here if the piece is of the opposite team
-                            if (this.isWhite != temp.GetComponentInChildren<Chesspiece>().isWhite)
-                                moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                    }
+                if (temp && temp.ObjType == BoardObjects.Type.EMPTY)
+                    moveset.Add(temp_coord.ToString(), temp_coord);
 
                 // Check 1 tile to the front
                 temp_coord = this_coord.GetOffsetCoord(BoardCoordinate.Direction.NORTH, offset);
                 temp = (temp_coord == null) ? null : board[temp_coord.X, temp_coord.Y];
-                if (temp)
-                    switch (temp.ObjType)
-                    {
-                        case BoardObjects.Type.EMPTY:    /* Space is empty */
-                            moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                        case BoardObjects.Type.PIECE:   /* Space is occupied by a chess piece */
-                            // Can only move here if the piece is of the opposite team
-                            if (this.isWhite != temp.GetComponentInChildren<Chesspiece>().isWhite)
-                                moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                    }
+                if (temp && temp.ObjType == BoardObjects.Type.EMPTY)
+                    moveset.Add(temp_coord.ToString(), temp_coord);
 
                 // Check 1 tile behind
                 temp_coord = this_coord.GetOffsetCoord(BoardCoordinate.Direction.SOUTH, offset);
                 temp = (temp_coord == null) ? null : board[temp_coord.X, temp_coord.Y];
-                if (temp)
-                    switch (temp.ObjType)
-                    {
-                        case BoardObjects.Type.EMPTY:    /* Space is empty */
-                            moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                        case BoardObjects.Type.PIECE:   /* Space is occupied by a chess piece */
-                            // Can only move here if the piece is of the opposite team
-                            if (this.isWhite != temp.GetComponentInChildren<Chesspiece>().isWhite)
-                                moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                    }
+                if (temp && temp.ObjType == BoardObjects.Type.EMPTY)
+                    moveset.Add(temp_coord.ToString(), temp_coord);
+
+                // Check diagonals, which pawn can attack
+                temp_coord = this_coord.GetOffsetCoord(BoardCoordinate.Direction.NE, offset);
+                temp = (temp_coord == null) ? null : board[temp_coord.X, temp_coord.Y];
+                if (temp && temp.ObjType == BoardObjects.Type.PIECE)
+                {
+                    Chesspiece neighbor = temp.GetComponentInChildren<Chesspiece>();
+                    bool evenTurn = (BoardManager.Instance.turn % 2 == 0);
+                    if (neighbor.isWhite == !evenTurn)
+                        moveset.Add(temp_coord.ToString(), temp_coord);
+                }
+
+                temp_coord = this_coord.GetOffsetCoord(BoardCoordinate.Direction.NW, offset);
+                temp = (temp_coord == null) ? null : board[temp_coord.X, temp_coord.Y];
+                if (temp && temp.ObjType == BoardObjects.Type.PIECE)
+                {
+                    Chesspiece neighbor = temp.GetComponentInChildren<Chesspiece>();
+                    bool evenTurn = (BoardManager.Instance.turn % 2 == 0);
+                    if (neighbor.isWhite == !evenTurn)
+                        moveset.Add(temp_coord.ToString(), temp_coord);
+                }
+
+                temp_coord = this_coord.GetOffsetCoord(BoardCoordinate.Direction.SE, offset);
+                temp = (temp_coord == null) ? null : board[temp_coord.X, temp_coord.Y];
+                if (temp && temp.ObjType == BoardObjects.Type.PIECE)
+                {
+                    Chesspiece neighbor = temp.GetComponentInChildren<Chesspiece>();
+                    bool evenTurn = (BoardManager.Instance.turn % 2 == 0);
+                    if (neighbor.isWhite == !evenTurn)
+                        moveset.Add(temp_coord.ToString(), temp_coord);
+                }
+
+                temp_coord = this_coord.GetOffsetCoord(BoardCoordinate.Direction.SW, offset);
+                temp = (temp_coord == null) ? null : board[temp_coord.X, temp_coord.Y];
+                if (temp && temp.ObjType == BoardObjects.Type.PIECE)
+                {
+                    Chesspiece neighbor = temp.GetComponentInChildren<Chesspiece>();
+                    bool evenTurn = (BoardManager.Instance.turn % 2 == 0);
+                    if (neighbor.isWhite == !evenTurn)
+                        moveset.Add(temp_coord.ToString(), temp_coord);
+                }
             }
             else
             {
@@ -104,17 +127,8 @@ public class Pawn : Chesspiece
                     if (board[prev_coord.X, prev_coord.Y].GetComponentInChildren<Chesspiece>() != null)
                         break;
 
-                    switch (temp.ObjType)
-                    {
-                        case BoardObjects.Type.EMPTY:    /* Space is empty */
-                            moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                        case BoardObjects.Type.PIECE:   /* Space is occupied by a chess piece */
-                            // Can only move here if the piece is of the opposite team
-                            if (this.isWhite != temp.GetComponentInChildren<Chesspiece>().isWhite)
-                                moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                    }
+                    if (temp.ObjType == BoardObjects.Type.EMPTY)
+                        moveset.Add(temp_coord.ToString(), temp_coord);
                 }
 
                 // Check 1 tile to the left
@@ -128,18 +142,9 @@ public class Pawn : Chesspiece
                     // If the previous space was occupied by a piece, then we can't continue in this direction
                     if (board[prev_coord.X, prev_coord.Y].GetComponentInChildren<Chesspiece>() != null)
                         break;
-                    
-                    switch (temp.ObjType)
-                    {
-                        case BoardObjects.Type.EMPTY:    /* Space is empty */
-                            moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                        case BoardObjects.Type.PIECE:   /* Space is occupied by a chess piece */
-                            // Can only move here if the piece is of the opposite team
-                            if (this.isWhite != temp.GetComponentInChildren<Chesspiece>().isWhite)
-                                moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                    }
+
+                    if (temp && temp.ObjType == BoardObjects.Type.EMPTY)
+                        moveset.Add(temp_coord.ToString(), temp_coord);
                 }
 
                 // Check 1 tile to the front
@@ -154,17 +159,8 @@ public class Pawn : Chesspiece
                     if (board[prev_coord.X, prev_coord.Y].GetComponentInChildren<Chesspiece>() != null)
                         break;
 
-                    switch (temp.ObjType)
-                    {
-                        case BoardObjects.Type.EMPTY:    /* Space is empty */
-                            moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                        case BoardObjects.Type.PIECE:   /* Space is occupied by a chess piece */
-                            // Can only move here if the piece is of the opposite team
-                            if (this.isWhite != temp.GetComponentInChildren<Chesspiece>().isWhite)
-                                moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                    }
+                    if (temp && temp.ObjType == BoardObjects.Type.EMPTY)
+                        moveset.Add(temp_coord.ToString(), temp_coord);
                 }
 
                 // Check 1 tile behind
@@ -179,17 +175,8 @@ public class Pawn : Chesspiece
                     if (board[prev_coord.X, prev_coord.Y].GetComponentInChildren<Chesspiece>() != null)
                         break;
 
-                    switch (temp.ObjType)
-                    {
-                        case BoardObjects.Type.EMPTY:    /* Space is empty */
-                            moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                        case BoardObjects.Type.PIECE:   /* Space is occupied by a chess piece */
-                            // Can only move here if the piece is of the opposite team
-                            if (this.isWhite != temp.GetComponentInChildren<Chesspiece>().isWhite)
-                                moveset.Add(temp_coord.ToString(), temp_coord);
-                            break;
-                    }
+                    if (temp && temp.ObjType == BoardObjects.Type.EMPTY)
+                        moveset.Add(temp_coord.ToString(), temp_coord);
                 }
             }
         }
@@ -197,11 +184,23 @@ public class Pawn : Chesspiece
         return moveset;
     }
 
-    public override void GoToJump(Vector3 destination)
+    /** Function:   GoToJump(Vec3)
+     *  Argument:   Vec3 dest - the exact world coordinate to jump to (NOT board coordinates)
+     *  Output:     Executes an animated jump to the position given by the vector dest with 
+     *              the appropriate 
+     */
+    public override void GoToJump(Vector3 dest)
     {
+        if (dest == destination)
+            return;
+
+        // Play jump animation
         Animator animator = this.GetComponent<Animator>();
         animator.Play("Pawn_JUMP", -1, 0f);
-        transform.position = destination;
+
+        // Transition to new position
+        speed = BASE_SPEED * Vector3.Distance(destination, dest) / 3.0f;
+        StartCoroutine(DelayedTransition(dest));
     }
 
     public override void GoToAttack(Vector3 destination)

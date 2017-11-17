@@ -6,3 +6,12 @@
 - Completed Pawn jump animation w/ rotations
 - Added in attack tiles for Pawn and a red glow for attack spaces
 - Implemented Rook moveset (animations pending)
+
+[LOG: NOV 16, 2017] - Tahmid
+- Added a texture to flowing stage tiles
+- Created Rook sliding animation
+- Created the CameraFollow class
+- Implemented camera targeting so when pieces move, the camera now follows them
+- Implemented camera targeting for piece selection
+- Implemented King's moveset
+- (GLITCHED) Implemented Knight's moveset

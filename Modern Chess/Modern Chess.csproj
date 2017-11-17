@@ -279,6 +279,8 @@
     <Compile Include="Assets\Scripts\Board Scripts\EmptyBoardObject.cs" />
     <Compile Include="Assets\Scripts\Board Scripts\TileMap.cs" />
     <Compile Include="Assets\Scripts\Board Scripts\TileType.cs" />
+    <Compile Include="Assets\Scripts\BoardItem Scripts\BoardObstacle.cs" />
+    <Compile Include="Assets\Scripts\Misc Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Piece Scripts\Bishop.cs" />
     <Compile Include="Assets\Scripts\Piece Scripts\Chesspiece.cs" />
     <Compile Include="Assets\Scripts\Piece Scripts\King.cs" />

@@ -7,6 +7,7 @@ namespace RTS_Cam
     [AddComponentMenu("RTS Camera")]
     public class RTS_Camera : MonoBehaviour
     {
+        public static RTS_Camera Instance { get; set; }
 
         #region Foldouts
 
@@ -167,6 +168,7 @@ namespace RTS_Cam
 
         private void Start()
         {
+            Instance = this;
             m_Transform = transform;
         }
 

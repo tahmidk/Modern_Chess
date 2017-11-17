@@ -4,19 +4,38 @@ using UnityEngine;
 
 public class Rook : Chesspiece
 {
-    private const float BASE_SPEED = 10f;
+    private const float BASE_SPEED = 7f;
 
     private void Start()
     {
+        animator = this.GetComponent<Animator>();
         role = Rank.ROOK;
         destination = this.transform.position;
     }
 
     private void Update()
     {
-        
+        // If there is a new destination, move towards that destination
+        if (transform.position != destination)
+        {
+            float distance = Vector3.Distance(transform.position, destination);
+            if (distance > 2)
+                animator.Play("Rook_SLIDE", -1, 0f);
+            else
+                animator.Play("Rook_SLIDE_STOP", -1, 0f);
+
+            Vector3 start_pos = this.GetComponentInParent<Transform>().position;
+            Vector3 direction = destination - start_pos;
+            transform.rotation = Quaternion.LookRotation(direction);
+            transform.position = Vector3.MoveTowards(start_pos, destination, BASE_SPEED * Time.deltaTime);
+        }
     }
 
+    /** Function:   PossibleMoves (Rook Override)
+     *  Argument:   None
+     *  Output:     Returns the possible moves of a rook. A rook can attack in and move any number of spaces in any 
+     *              off-diagonal directions (N, S, E, W)
+     */
     public override Hashtable PossibleMoves()
     {
         // Initialize hashtable to return
@@ -157,10 +176,21 @@ public class Rook : Chesspiece
         return moveset;
     }
 
-    public override void GoToSlide(Vector3 destination)
+    /** Function:   GoToSlide(Vec3)
+     *  Argument:   Vec3 dest - the exact world coordinate to jump to (NOT board coordinates)
+     *  Output:     Executes an animated slide to the position given by the vector dest with 
+     *              the appropriate animations
+     */
+    public override void GoToSlide(Vector3 dest)
     {
-        //Animator animator = this.GetComponent<Animator>();
-        transform.position = destination;
+        if (dest == destination)
+            return;
+
+        // Play jump animation
+        animator.Play("Rook_SLIDE_BEGIN", -1, 0f);
+
+        // Transition to new position
+        StartCoroutine(DelayedTransition(dest));
     }
 
     public override void GoToAttack(Vector3 destination)

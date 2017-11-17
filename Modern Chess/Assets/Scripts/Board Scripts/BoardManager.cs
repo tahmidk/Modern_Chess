@@ -120,7 +120,8 @@ public class BoardManager : MonoBehaviour
 
         // Otherwise, select whatever is at Board[x,y]
         selected_piece = sel;
-        selected_piece.Highlight();                                             /* Highlight piece */
+        selected_piece.FocusCam(CameraFollow.Behavior.INSTANT);     /* Focus camera on selected piece */
+        selected_piece.Highlight();                                 /* Highlight piece */
         TileMap.Instance.HighlightTileMoves(selected_piece.PossibleMoves());    /* Highlight moveset */
     }
 
@@ -149,7 +150,6 @@ public class BoardManager : MonoBehaviour
             // Update selected piece's fields and animate the movement
             selected_piece.CurrentX = x;
             selected_piece.CurrentY = y;
-            //selected_piece.transform.position = GetTileCenter(x, y);
             selected_piece.GoTo(GetTileCenter(x, y));
 
             // Go to next turn

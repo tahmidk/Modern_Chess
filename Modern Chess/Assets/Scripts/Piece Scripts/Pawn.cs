@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Pawn : Chesspiece
 {
-    private const float BASE_SPEED = 7f;
+    private const float BASE_SPEED = 7.0f / 3.0f;
     private float speed;
 
     private void Start()
     {
         // Initialize fields
+        animator = this.GetComponent<Animator>();
         role = Rank.PAWN;
         destination = this.transform.position;
     }
@@ -24,13 +25,13 @@ public class Pawn : Chesspiece
             transform.rotation = Quaternion.LookRotation(direction);
             transform.position = Vector3.MoveTowards(start_pos, destination, speed * Time.deltaTime);
         }
+
     }
 
     /** Function:   PossibleMoves (Pawn Override)
      *  Argument:   None
-     *  Output:     Returns a boolean matrix of size BoardManager.BOARD_SIZE x BoardManager.BOARD_SIZE
-     *              where each entry is either TRUE if it is possible for this Pawn to move there this 
-     *              turn or FALSE if it cannot be reached this turn
+     *  Output:     Returns the possible moves of a pawn. A pawn can move 2 spaces in any direction but can only
+     *              attack pieces on the neighboring tiles diagonal to the pawn's tile
      */
     public override Hashtable PossibleMoves()
     {
@@ -187,7 +188,7 @@ public class Pawn : Chesspiece
     /** Function:   GoToJump(Vec3)
      *  Argument:   Vec3 dest - the exact world coordinate to jump to (NOT board coordinates)
      *  Output:     Executes an animated jump to the position given by the vector dest with 
-     *              the appropriate 
+     *              the appropriate animations
      */
     public override void GoToJump(Vector3 dest)
     {
@@ -195,11 +196,10 @@ public class Pawn : Chesspiece
             return;
 
         // Play jump animation
-        Animator animator = this.GetComponent<Animator>();
         animator.Play("Pawn_JUMP", -1, 0f);
 
         // Transition to new position
-        speed = BASE_SPEED * Vector3.Distance(destination, dest) / 3.0f;
+        speed = BASE_SPEED * Vector3.Distance(destination, dest);
         StartCoroutine(DelayedTransition(dest));
     }
 

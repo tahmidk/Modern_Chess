@@ -116,6 +116,25 @@ public abstract class Chesspiece : BoardObjects
         }
     }
 
+    /** Function:   FocusCam()
+     *  Argument:   None
+     *  Output:     Focuses the camera on this piece with the given camera behavior
+     */
+    public void FocusCam(CameraFollow.Behavior mode)
+    {
+        CameraFollow.Instance.mode = mode;
+        CameraFollow.Instance.target = this.GetComponentInParent<Transform>();
+    }
+
+    /** Function:   FocusCam()
+     *  Argument:   None
+     *  Output:     Unfocuses the camera from this piece
+     */
+    public void UnfocusCam()
+    {
+        CameraFollow.Instance.target = null;
+    }
+
     // A delay function used to time jumps when using the GoToJump() method to move
     protected IEnumerator DelayedTransition(Vector3 target)
     {

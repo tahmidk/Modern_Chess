@@ -33,7 +33,7 @@ public class Knight : Chesspiece
         BoardObjects[,] board = BoardManager.Instance.Board;
 
         BoardObjects temp = null;
-        BoardCoordinate this_coord = new BoardCoordinate(CurrentX, CurrentY);   /* BoardCoordinates of the King */
+        BoardCoordinate this_coord = new BoardCoordinate(CurrentX, CurrentY);   /* BoardCoordinates of the Knight */
         BoardCoordinate temp_coord = null;  /* A temporary coordinate */
 
         List<BoardCoordinate> possible = new List<BoardCoordinate>();
@@ -79,15 +79,15 @@ public class Knight : Chesspiece
         foreach (BoardCoordinate coord in possible)
         {
             temp = board[coord.X, coord.Y];
-            if (temp && temp.ObjType == BoardObjects.Type.PIECE)
-            {
+            if (temp && temp.ObjType == BoardObjects.Type.PIECE) {
                 Chesspiece neighbor = temp.GetComponentInChildren<Chesspiece>();
                 bool evenTurn = (BoardManager.Instance.turn % 2 == 0);
                 if (neighbor.isWhite == !evenTurn)
                     moveset.Add(coord.ToString(), coord);
             }
-            else
+            else if (temp && temp.ObjType == BoardObjects.Type.EMPTY) {
                 moveset.Add(coord.ToString(), coord);
+            }
         }
 
         return moveset;

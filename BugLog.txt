@@ -2,6 +2,9 @@
 [LOG: NOV 15, 2017] - Tahmid
 - (FIXED) If you select a piece and immediately unselect it, tile under it continues to glow
 
-[LOG: NOV 15, 2017] - Tahmid
-- The Knights jump backwards
-- The Knights can jump into trees
+[LOG: NOV 16, 2017] - Tahmid
+- (FIXED) The Knights jump backwards
+- (FIXED) The Knights can jump into trees
+
+[LOG: NOV 17, 2017] - Tahmid
+- Fixed previous bugs

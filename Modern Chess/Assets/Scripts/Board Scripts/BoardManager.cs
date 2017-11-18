@@ -57,6 +57,7 @@ public class BoardManager : MonoBehaviour
         // Generate world
         TileMap.Instance.GenerateBoard();
         this.SpawnAll();
+
     }
 
     /*----------------------------------------[UPDATE]---------------------------------------------*/
@@ -230,6 +231,9 @@ public class BoardManager : MonoBehaviour
         Board[pos_x, pos_y].SetPosition(pos_x, pos_y);
 
         activeChessPieces.Add(obj);
+
+        if (piece == Piece.WHT_KING)
+            obj.GetComponentInChildren<Chesspiece>().FocusCam(CameraFollow.Behavior.INSTANT);
     }
 
     /** Function:   GetTileCenter(int, int)

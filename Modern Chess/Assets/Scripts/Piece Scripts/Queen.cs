@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class Queen : Chesspiece
 {
-    public override void GoToJump(Vector3 destination)
+    private const float BASE_SPEED = 7f;
+
+    private void Start()
     {
-        //Animator animator = this.GetComponent<Animator>();
+        
+    }
+
+    private void Update()
+    {
+        
+    }
+
+    public override void GoToSlide(Vector3 destination)
+    {
+        
     }
 
     public override void GoToAttack(Vector3 destination)
     {
-        //Animator animator = this.GetComponent<Animator>();
+        
     }
 }

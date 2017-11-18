@@ -27,6 +27,11 @@ public class King : Chesspiece
         }
     }
 
+    /** Function:   PossibleMoves (King Override)
+     *  Argument:   None
+     *  Output:     Returns the possible moves of a rook. A king can normally only move 1 space in 
+     *              any of the 8 possible direction 
+     */
     public override Hashtable PossibleMoves()
     {
         Hashtable moveset = new Hashtable();
@@ -43,14 +48,16 @@ public class King : Chesspiece
             temp = (temp_coord == null) ? null : board[temp_coord.X, temp_coord.Y];
             if (temp)
             {
+                // Cannot move into allies. Can only move into space by killing enemies
                 if (temp.ObjType == BoardObjects.Type.PIECE)
                 {
                     Chesspiece neighbor = temp.GetComponentInChildren<Chesspiece>();
                     bool evenTurn = (BoardManager.Instance.turn % 2 == 0);
-                    if (neighbor.isWhite == !evenTurn)
+                    if (neighbor.isWhite == !evenTurn) // Checks whether neighbor is an ally or foe
                         moveset.Add(temp_coord.ToString(), temp_coord);
                 }
-                else
+                // Otherwise, can jump to this coord iff the space is unoccupied
+                else if (temp.ObjType == BoardObjects.Type.EMPTY)
                     moveset.Add(temp_coord.ToString(), temp_coord);
             }
         }

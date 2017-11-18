@@ -22,7 +22,7 @@ public class Knight : Chesspiece
         {
             Vector3 start_pos = this.GetComponentInParent<Transform>().position;
             Vector3 direction = destination - start_pos;
-            transform.rotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.LookRotation(-1 * direction);
             transform.position = Vector3.MoveTowards(start_pos, destination, speed * Time.deltaTime);
         }
     }
@@ -33,15 +33,26 @@ public class Knight : Chesspiece
         BoardObjects[,] board = BoardManager.Instance.Board;
 
         BoardObjects temp = null;
+        BoardCoordinate this_coord = new BoardCoordinate(CurrentX, CurrentY);   /* BoardCoordinates of the Knight */
         BoardCoordinate temp_coord = null;  /* A temporary coordinate */
 
         List<BoardCoordinate> possible = new List<BoardCoordinate>();
+        /*  If K is the knight, [X] marks the anchors
+         *  _ | _ | _ | _ | _ 
+         *  _ |[X]| _ |[X]| _
+         *  _ | _ | K | _ | _
+         *  _ |[X]| _ |[X]| _
+         *  _ | _ | _ | _ | _
+         */
         BoardCoordinate NEAnchor = this_coord.GetOffsetCoord(BoardCoordinate.Direction.NE, 1);
         BoardCoordinate SEAnchor = this_coord.GetOffsetCoord(BoardCoordinate.Direction.SE, 1);
         BoardCoordinate NWAnchor = this_coord.GetOffsetCoord(BoardCoordinate.Direction.NW, 1);
         BoardCoordinate SWAnchor = this_coord.GetOffsetCoord(BoardCoordinate.Direction.SW, 1);
 
-        if(NEAnchor != null)
+        // For each anchor in the above diagram, the knight can jump to the positions that are 1 
+        // in either of the anchor's 2 directions. For the NEAnchor, the knight can jump to the spots
+        // directly North and East relative to the anchor
+        if (NEAnchor != null)
         {
             if ((temp_coord = NEAnchor.GetOffsetCoord(BoardCoordinate.Direction.NORTH, 1)) != null)
                 possible.Add(temp_coord);
@@ -77,17 +88,19 @@ public class Knight : Chesspiece
         // them to the moveset hashtable
         foreach (BoardCoordinate coord in possible)
         {
+            // Fetch the BoardObject at (x, y)
             temp = board[coord.X, coord.Y];
+            // If it's a chess piece, add the move to moveset iff it is not an ally
+            if (temp && temp.ObjType == BoardObjects.Type.PIECE) {
                 Chesspiece neighbor = temp.GetComponentInChildren<Chesspiece>();
                 bool evenTurn = (BoardManager.Instance.turn % 2 == 0);
-                if (neighbor.isWhite == !evenTurn)
+                if (neighbor.isWhite == !evenTurn) // Checks whether neighbor is an ally or foe
                     moveset.Add(coord.ToString(), coord);
             }
-<<<<<<< HEAD
-            else if (temp && temp.ObjType == BoardObjects.Type.EMPTY)
-=======
->>>>>>> 5b66876aa7c3baad75ee3417dd76fd5cd87fc180
+            // Otherwise, can jump to this spot if it is empty
+            else if (temp && temp.ObjType == BoardObjects.Type.EMPTY) {
                 moveset.Add(coord.ToString(), coord);
+            }
         }
 
         return moveset;

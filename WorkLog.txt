@@ -15,3 +15,8 @@
 - Implemented camera targeting for piece selection
 - Implemented King's moveset
 - (GLITCHED) Implemented Knight's moveset
+
+[LOG: NOV 17, 2017] - Tahmid
+- Fixed Knight moveset
+- Implemented Bishop movement animations and moveset
+- Added an instant camera focus on white king upon initialization of the board

@@ -19,7 +19,7 @@ public class Rook : Chesspiece
         if (transform.position != destination)
         {
             float distance = Vector3.Distance(transform.position, destination);
-            if (distance > 2)
+            if (distance > 3)
                 animator.Play("Rook_SLIDE", -1, 0f);
             else
                 animator.Play("Rook_SLIDE_STOP", -1, 0f);
@@ -186,7 +186,7 @@ public class Rook : Chesspiece
         if (dest == destination)
             return;
 
-        // Play jump animation
+        // Begin slide animation
         animator.Play("Rook_SLIDE_BEGIN", -1, 0f);
 
         // Transition to new position

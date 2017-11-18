@@ -86,7 +86,7 @@ public class Knight : Chesspiece
                 if (neighbor.isWhite == !evenTurn)
                     moveset.Add(coord.ToString(), coord);
             }
-            else
+            else if (temp && temp.ObjType == BoardObjects.Type.EMPTY)
                 moveset.Add(coord.ToString(), coord);
         }
 

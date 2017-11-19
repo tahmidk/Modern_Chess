@@ -20,3 +20,8 @@
 - Fixed Knight moveset
 - Implemented Bishop movement animations and moveset
 - Added an instant camera focus on white king upon initialization of the board
+
+[LOG: NOV 19, 2017] - Tahmid
+- Added slide animations for the Queen
+- Implemented queen's moveset with animations
+- Beginning to implement check system by adding fields to the EmptyBoardObject class that keep track of what team occupies a given space

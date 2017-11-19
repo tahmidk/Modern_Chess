@@ -8,3 +8,6 @@
 
 [LOG: NOV 17, 2017] - Tahmid
 - Fixed previous bugs
+
+[LOG: NOV 19, 2017] - Tahmid
+- No new bugs
